@@ -1,10 +1,4 @@
-This theme_support version has been updated by Damien Le Berrigaud for Rails 2.0
-http://www.webdrivenblog.com/
-
-It was then forked for Rails 2.2 (and later 2.3) support by James Stewart - http://jystewart.net/process/
-
-Some notes on the integration of Rails 2.3 support can be found at:
-http://jystewart.net/process/tag/theme_support/
+This theme support has been turned into a gem and ported to Rails 3.0 by Pierre Yager and Sylvain Claudel (http://www.crisalid.com)
 
 = Theme Support for Rails Applications
 
@@ -13,53 +7,37 @@ It supports theme specific images, stylesheets, javascripts, and views. The
 views can be in ERb (rhtml) or liquid formats. Optionally, you can configure 
 the theme system to ignore any templates except liquid ones.
 
-== Tests
 
-A test application with a range of cucumber-based tests is available separately at:
+== Creating a Theme using Theme Support ==
 
-http://github.com/jystewart/theme_support_test_app
+This plugin automatically makes any patches needed for theme support. Use the following command to create the file structure needed (replace YOUR_THEME_NAME with the name of your theme):
 
+rails generate theme YOUR_THEME_NAME
 
-== Changes from the original version
-
- * Rake tasks are now namespaced, eg: "rake themes:cache:create" instead of "rake theme_create_cache"
- * Layouts now live within themes/[theme_name]/views/layouts to match up with Rails conventions
-
-== Known Issues
-
-Liquid template handling is not tested in 2.2 or 2.3
-The various asset methods (theme_stylesheet_link_tag etc.) don't work in 2.2
-
-== Usage
-
-This plugin automatically makes any patches needed for theme support. You can
-use the theme_generator to create the file structure needed, or create it 
-yourself.
-
-It expects the following theme folder structure.
+The following theme folder structure will generate in your app code:
 
   $app_root
     themes/
       [theme_name]
-        
         images/
         stylesheets/
         javascripts/
         views/           <- you can override application views
-          layouts/         <- layout .rhtml or .liquid templates
+          layouts/       <- layout .rhtml or .liquid templates
         about.markdown
         preview.png
 
+==Caveats==
 When run in production mode, it will automatically cache the theme files so that
 the web-server will deliver them in subsequent requests. 
 
 It bears noting that, like Typo, this will mean your apache/fcgi process will need
-write permissions. This could be a possible security vulnerability.
+write permissions. This could be a possible security vulnerability.  For those of us using passanger and mongrels, more information will follow.
 
 With that in mind, it is best to pre-cache all of the theme files by using the 
 included rake tasks:
 
-  $ rake theme_create_cache
+  $ rake themes:cache:create
 
 The theme file cache generates the following file structure:
 
@@ -73,17 +51,18 @@ The theme file cache generates the following file structure:
 
 There are other rake tasks available:
 
- - theme_create_cache
- - theme_remove_cache
- - theme_update_cache
+ - themes:cache:create
+ - themes:cache:remove
+ - themes:cache:update
 
+== Using your new Theme in your app code ==
 You specify which theme to use in your controller by using the 'theme' helper.
 It's used just like the 'layout' helper. In fact, you can use them both 
-simultaneously. The following will render actions using the 'default' layout 
-in the 'blue_bird' theme (theme/blue_bird/layouts/default.rhtml):
+simultaneously. The following will render actions using the 'application' layout 
+in the 'blue_bird' theme (theme/blue_bird/views/layouts/application.html.erb):
 
   class ApplicationController < ActionController::Base
-    layout 'default'
+    layout 'application'
 
     theme 'blue_bird'
 
@@ -93,7 +72,7 @@ in the 'blue_bird' theme (theme/blue_bird/layouts/default.rhtml):
 You can also defer the theme lookup to a controller method:
 
   class ApplicationController < ActionController::Base
-    layout 'default'
+    layout 'application'
 
     theme :get_theme
 
@@ -112,8 +91,12 @@ You can also defer the theme lookup to a controller method:
 Note: By setting the theme in the ApplicationController you can set 
 the theme for the whole application.
 
+== Using themes in your Views ==
+
+ERb:
+----
 In your application views, there are theme specific helper tags 
-available to you. For ERb templates they are:
+available to you.
 
  - theme_image_tag
  - theme_image_path
@@ -122,7 +105,13 @@ available to you. For ERb templates they are:
  - theme_stylesheet_link_tag
  - theme_stylesheet_path
 
-For liquid templates there is a single helper, themeitem,  that will determine 
+ERB Example :
+  # Note my theme is called "blue_bird" and my css file is called "style.css"
+  <%= theme_stylesheet_link_tag 'blue_bird', 'style' %>
+
+LIQUID:
+-------
+Liquid templates there is a single helper, themeitem,  that will determine 
 the path base on the theme file extension. Here's how you'd use it:
 
   <link rel="StyleSheet" href="{% themeitem %} default.css {% endthemeitem %}" />
@@ -134,6 +123,8 @@ The output from those two calls are:
   <link rel="StyleSheet" href="/themes/[current_theme]/stylesheets/default.css" />
   ...
   <img src="/themes/[current_theme]/images/logo.png" />
+
+== ActionMailer Support ==
 
 New in version 1.4 is ActionMailer support. Note, this is still experimental. However,
 if you would like your themes to be able to override your ActionMailer views, you can
@@ -149,14 +140,22 @@ allowing themes in emails:
  
 == Contributors
 
-The theme_support pluging includs patches from the following:
+The theme_support plugin includes patches from the following:
 
 * agkr
 * D.J. Vogel
+* Pierre Yager (zedalaye) and Sylvain Claudel (riven)
 
 Thanks guys!
 
 == Changelog
+
+  3.0.0 - Converted theme_support plugin into a Rails 3.0 compatible gem.
+
+  1.5.0 - Using jystewart's fork of the original github theme_support, the helper methods should
+ 		  work in Rails 2.2.2.  ReadME fixed.  Layouts changed to reflect Rails conventions: e.g.,
+ 		  layouts are now under views, application.html.erb used to reflect standard naming
+ 		  conventions.
 
   1.4.0 - Better support for Rails 1.1+. Updated the liquid themeitem tag.
           Liquid layouts are no longer generated by default.Added a couple 

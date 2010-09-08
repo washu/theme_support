@@ -34,7 +34,7 @@ class Theme
 private 
 
   def self.themes_root
-    File.join(RAILS_ROOT, "themes")
+    File.join(Rails.root, "themes")
   end
 
   def self.path_to_theme(theme)

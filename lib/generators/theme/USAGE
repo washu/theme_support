@@ -10,6 +10,6 @@ DESCRIPTION
      and views).
 
 EXAMPLE
-     ./script/generate theme default
+     rails generate theme default
 
      This will generate the file structure for a theme named 'default'. 

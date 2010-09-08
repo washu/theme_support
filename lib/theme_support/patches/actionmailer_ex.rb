@@ -1,9 +1,16 @@
-# Extend the Base ActionMailer to support themes
+# Extend the Base ActionController to support themes
 module ActionMailer
   class Base
+  
+    alias_method :__render, :render
+    alias_method :__initialize, :initialize
+  
+    @current_theme = nil
+  
+    attr_accessor :current_theme
    
     def initialize(method_name=nil, *parameters)
-      if parameters[-1].is_a?(Hash) and (parameters[-1].include? :theme)
+      if parameters[-1].is_a? Hash and (parameters[-1].include? :theme)
         @current_theme = parameters[-1][:theme]
         parameters[-1].delete :theme
         parameters[-1][:current_theme] = @current_theme
@@ -16,17 +23,9 @@ module ActionMailer
       __send__(method_name, *parameters)
 
       tpaths = []
-      theme_template_roots = {}
+      tpaths << File.join(Rails.root, "themes", self.current_theme, "views", mailer_name) if self.current_theme
+      tpaths << template_path
       
-      if self.current_theme
-        path = File.join(RAILS_ROOT, "themes", self.current_theme, "views", mailer_name) 
-        tpaths << path
-        theme_template_roots[path] = ActionView::Base.process_view_paths(File.dirname(path)).first
-      end
-      
-      tpaths << File.join(RAILS_ROOT, template_path)
-      theme_template_roots[File.join(RAILS_ROOT, template_path)] = template_root
-
       # If an explicit, textual body has not been set, we check assumptions.
       unless String === @body
         # First, we look to see if there are any likely templates that match,
@@ -38,7 +37,7 @@ module ActionMailer
           
           tpaths.each do |tpath|
             Dir.glob("#{tpath}/#{@template}.*").each do |path|
-              template = theme_template_roots[tpath]["#{mailer_name}/#{File.basename(path)}"]
+              template = template_root["#{tpath}/#{File.basename(path)}"]
 
               # Skip unless template has a multipart format
               next unless template && template.multipart?
@@ -87,5 +86,8 @@ module ActionMailer
       # build the mail object itself
       @mail = create_mail
     end
+
+    
+   
   end
 end
