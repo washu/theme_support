@@ -3,10 +3,12 @@ require 'rubygems'
 spec = Gem::Specification.new do |s|
   ## package information
   s.name        = 'theme_support'
-  s.author      = 'sc/py'
+  s.author      = 'Pierre Yager and Sylvain Claudel'
+  s.email       = "pierre@levosgien.net"
   s.version     = ("$Release: 3.0.0" =~ /[\.\d]+/) && $&
   s.platform    = Gem::Platform::RUBY
-  s.homepage    = 'http://github.com/riven/theme_support'
+  s.homepage    = 'http://github.com/zedalaye/theme_support'
+  s.rubyforge_project = 'theme-support'
   s.summary     = "add multi-themes support to Rails 3.0"
   s.description = <<-END
   ThemeSupport adds support for multi-themes to your Rails 3.0 application
