@@ -15,14 +15,10 @@ class AbstractController::Base
   #    'theme_name'
   #  end
 
-  #class << self
-    def self.theme(theme_name, conditions = {})
-      # TODO: Allow conditions... (?)
-      write_inheritable_attribute "theme", theme_name
-      theme = ActionView::Base.process_view_paths(File.join("themes", theme_name, "views"))
-      prepend_view_path(theme)
-    end
-  #end
+  def self.theme(theme_name, conditions = {})
+    # TODO: Allow conditions... (?)
+    write_inheritable_attribute "theme", theme_name
+  end
 
   # Retrieves the current set theme
   def current_theme(passed_theme=nil)
