@@ -32,19 +32,21 @@ class AbstractController::Base
   end
 end
 
-AbstractController::Layouts.module_eval do
-  def _normalize_options(options)
-    super
-
-    if _include_layout?(options)
-      layout = options.key?(:layout) ? options.delete(:layout) : :default
-      value = _layout_for_option(layout)
-      options[:layout] = (value =~ /\blayouts/ ? value : "layouts/#{value}") if value
-    end
-
-    if current_theme
-      theme_path = File.join(Rails.root, "themes", current_theme, "views")
-      options[:layout] = File.join(theme_path, options[:layout])
-    end
-  end
-end
+# Hack which uses layout theme but crashes if it doesn't exist !
+# Now it loads the default layout
+#AbstractController::Layouts.module_eval do
+#  def _normalize_options(options)
+#    super
+#
+#    if _include_layout?(options)
+#      layout = options.key?(:layout) ? options.delete(:layout) : :default
+#      value = _layout_for_option(layout)
+#      options[:layout] = (value =~ /\blayouts/ ? value : "layouts/#{value}") if value
+#    end
+#
+#    if current_theme
+#      theme_path = File.join(Rails.root, "themes", current_theme, "views")
+#      options[:layout] = File.join(theme_path, options[:layout])
+#    end
+#  end
+#end
