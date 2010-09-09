@@ -5,19 +5,19 @@ module ActionView::Helpers::AssetTagHelper
    # returns the public path to a theme stylesheet
    def theme_stylesheet_path( source=nil, theme=nil )
       theme = theme || controller.current_theme
-      compute_public_path(source || "theme", "themes/#{theme}/stylesheets", 'css')
+      compute_public_path(source || "theme", "themes/#{theme}/stylesheets", 'css').html_safe
    end
 
    # returns the path to a theme image
    def theme_image_path( source, theme=nil )
       theme = theme || controller.current_theme
-      compute_public_path(source, "themes/#{theme}/images", 'png')
+      compute_public_path(source, "themes/#{theme}/images", 'png').html_safe
    end
 
    # returns the path to a theme javascript
    def theme_javascript_path( source, theme=nil )
       theme = theme || controller.current_theme
-      compute_public_path(source, "themes/#{theme}/javascripts", 'js')
+      compute_public_path(source, "themes/#{theme}/javascripts", 'js').html_safe
    end
    
    # This tag it will automatially include theme specific css files
@@ -27,7 +27,7 @@ module ActionView::Helpers::AssetTagHelper
       sources.collect { |source|
          source = theme_stylesheet_path(source)
          tag("link", { "rel" => "Stylesheet", "type" => "text/css", "media" => "screen", "href" => source }.merge(options))
-      }.join("\n")
+      }.join("\n").html_safe
    end
    
    # This tag will return a theme-specific IMG
@@ -42,7 +42,7 @@ module ActionView::Helpers::AssetTagHelper
        options.delete :size
      end
 
-     tag("img", options)
+     tag("img", options).html_safe
    end
    
    # This tag can be used to return theme-specific javscripts
@@ -58,6 +58,6 @@ module ActionView::Helpers::AssetTagHelper
      sources.collect { |source|
        source = theme_javascript_path(source)        
        content_tag("script", "", { "type" => "text/javascript", "src" => source }.merge(options))
-     }.join("\n")
+     }.join("\n").html_safe
    end
 end

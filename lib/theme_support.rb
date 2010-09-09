@@ -2,8 +2,8 @@
 require 'theme_support/railtie'
 
 # Load the Theme model and ThemeController
-require 'theme_support/theme'
-require 'theme_support/theme_controller'
+require 'theme_support/themesupport'
+require 'theme_support/themesupport_controller'
 
 # Initializes theme support by extending some of the core Rails classes
 require 'theme_support/patches/abstractcontroller_ex'

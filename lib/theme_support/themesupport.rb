@@ -1,4 +1,4 @@
-class Theme
+class Themesupport
   cattr_accessor :cache_theme_lookup
   @@cache_theme_lookup = false
 
@@ -12,13 +12,13 @@ class Theme
  
   def description
     if @description_html.nil?
-      @description_html = RedCloth.new(File.read( File.join(Theme.path_to_theme(name), "about.markdown") )).to_html(:markdown, :textile) rescue "#{title}"
+      @description_html = RedCloth.new(File.read( File.join(Themesupport.path_to_theme(name), "about.markdown") )).to_html(:markdown, :textile) rescue "#{title}"
     end
     @description_html
   end
   
   def has_preview?
-    File.exists?( File.join( Theme.path_to_theme(name), 'images', 'preview.png' ) ) rescue false
+    File.exists?( File.join( Themesupport.path_to_theme(name), 'images', 'preview.png' ) ) rescue false
   end
   
   def preview_image
