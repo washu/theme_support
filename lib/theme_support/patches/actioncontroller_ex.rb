@@ -6,8 +6,10 @@ module ActionController
 
     def default_render
       theme = current_theme
-      theme = ActionView::Base.process_view_paths(File.join("themes", theme, "views"))
-      prepend_view_path(theme)
+      if theme
+        theme = ActionView::Base.process_view_paths(File.join("themes", theme, "views"))
+        prepend_view_path(theme)
+      end
       theme_support_default_render
     end
   end
