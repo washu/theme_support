@@ -149,6 +149,8 @@ The theme_support plugin includes patches from the following:
 Thanks guys!
 
 == Changelog
+  3.0.4 - [BUG] override view when we use explicitely render 
+
   3.0.3 - Hack which uses layout theme but crashes if it doesn't exist ! Now it loads the default layout
 
   3.0.2 - Don't load a nil theme

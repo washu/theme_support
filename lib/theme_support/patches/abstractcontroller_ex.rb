@@ -32,21 +32,19 @@ class AbstractController::Base
   end
 end
 
-# Hack which uses layout theme but crashes if it doesn't exist !
-# Now it loads the default layout
-#AbstractController::Layouts.module_eval do
-#  def _normalize_options(options)
-#    super
-#
-#    if _include_layout?(options)
-#      layout = options.key?(:layout) ? options.delete(:layout) : :default
-#      value = _layout_for_option(layout)
-#      options[:layout] = (value =~ /\blayouts/ ? value : "layouts/#{value}") if value
-#    end
-#
-#    if current_theme
-#      theme_path = File.join(Rails.root, "themes", current_theme, "views")
-#      options[:layout] = File.join(theme_path, options[:layout])
-#    end
-#  end
-#end
+module AbstractController
+  module Rendering
+    alias_method :theme_support_render, :render
+
+    def render(*args, &block)
+      theme = current_theme
+      if theme
+        theme = ActionView::Base.process_view_paths(File.join("themes", theme, "views"))
+        prepend_view_path(theme)
+      end
+
+      theme_support_render(*args, &block)
+    end
+
+  end
+end

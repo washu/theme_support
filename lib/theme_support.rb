@@ -7,7 +7,6 @@ require 'theme_support/theme_controller'
 
 # Initializes theme support by extending some of the core Rails classes
 require 'theme_support/patches/abstractcontroller_ex'
-require 'theme_support/patches/actioncontroller_ex'
 require 'theme_support/patches/routeset_ex'
 
 # Add the tag helpers for rhtml and, optionally, liquid templates
