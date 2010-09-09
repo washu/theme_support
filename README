@@ -149,6 +149,8 @@ The theme_support plugin includes patches from the following:
 Thanks guys!
 
 == Changelog
+  3.0.2 - Don't load a nil theme
+
   3.0.1 - layout :mymethod works again
 
   3.0.0 - Converted theme_support plugin into a Rails 3.0 compatible gem.
