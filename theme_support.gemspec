@@ -5,7 +5,7 @@ spec = Gem::Specification.new do |s|
   s.name        = 'theme_support'
   s.author      = 'Pierre Yager and Sylvain Claudel'
   s.email       = "pierre@levosgien.net"
-  s.version     = ("$Release: 3.0.5" =~ /[\.\d]+/) && $&
+  s.version     = ("$Release: 3.0.6" =~ /[\.\d]+/) && $&
   s.platform    = Gem::Platform::RUBY
   s.homepage    = 'http://github.com/zedalaye/theme_support'
   s.rubyforge_project = 'theme-support'
