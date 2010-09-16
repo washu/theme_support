@@ -1,19 +1,20 @@
+# coding: utf-8
 # The controller for serving/cacheing theme content...
 #
 class ThemesupportController < ActionController::Base
 
-  after_filter :cache_theme_files
+  #after_filter :cache_theme_files
   
   def stylesheets
-    render_theme_item(:stylesheets, params[:filename].join('/'), params[:theme])
+    render_theme_item(:stylesheets, [params[:filename]].flatten.join('/'), params[:theme])
   end
 
   def javascript
-    render_theme_item(:javascripts, params[:filename].join('/'), params[:theme], 'text/javascript')
+    render_theme_item(:javascripts, [params[:filename]].flatten.join('/'), params[:theme], 'text/javascript')
   end
 
   def images
-    render_theme_item(:images, params[:filename].to_s, params[:theme])
+    render_theme_item(:images, [params[:filename]].flatten.join('/'), params[:theme])
   end
 
   def error
@@ -24,7 +25,11 @@ class ThemesupportController < ActionController::Base
   
   def render_theme_item(type, file, theme, mime = mime_for(file))
     render :text => "Not Found", :status => 404 and return if file.split(%r{[\\/]}).include?("..")
-    send_file "#{Themesupport.path_to_theme(theme)}/#{type}/#{file}", :type => mime, :content_type => mime, :disposition => 'inline'
+
+    #Call manually, if it is in a after_filter send_file doesn't work
+    cache_theme_files
+
+    send_file "#{Themesupport.path_to_theme(theme)}/#{type}/#{file}", :type => mime, :disposition => 'inline'
   end
 
   def cache_theme_files
