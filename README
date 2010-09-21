@@ -149,6 +149,8 @@ The theme_support plugin includes patches from the following:
 Thanks guys!
 
 == Changelog
+  3.0.7 - Doesn't work for render_to_string because the hack is too high in the stack, render use render_to_string. Fixed
+
   3.0.6 - We didn't need to preload cache (rake themes:cache:update) in development
 
   3.0.5 - html_safe on helpers, Theme model and controller become Themesupport model and controller

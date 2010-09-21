@@ -34,16 +34,31 @@ end
 
 module AbstractController
   module Rendering
-    alias_method :theme_support_render, :render
 
-    def render(*args, &block)
+  #Too high in the stack
+
+#    alias_method :theme_support_render, :render
+
+#    def render(*args, &block)
+#      theme = current_theme
+#      if theme
+#        theme = ActionView::Base.process_view_paths(File.join("themes", theme, "views"))
+#        prepend_view_path(theme)
+#      end
+#
+#      theme_support_render(*args, &block)
+#    end
+
+    alias_method :theme_support_render_to_string, :render_to_string
+
+    def render_to_string(*args, &block)
       theme = current_theme
       if theme
         theme = ActionView::Base.process_view_paths(File.join("themes", theme, "views"))
         prepend_view_path(theme)
       end
 
-      theme_support_render(*args, &block)
+      theme_support_render_to_string(*args, &block)
     end
 
   end
